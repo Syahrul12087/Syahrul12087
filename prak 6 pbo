@@ -1,0 +1,335 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": []
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Konstruktor dan Enkapsulasi**"
+      ],
+      "metadata": {
+        "id": "9MXEx_kl3JCH"
+      }
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "Memahami cara menggunakan konstruktor untuk inisialisasi objek dan menerapkan enkapsulasi untuk melindungi akses langsung ke atribut kelas"
+      ],
+      "metadata": {
+        "id": "A0KAG4aTcQKV"
+      }
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 40,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gF6O4QuQcNbV",
+        "outputId": "572c4013-7d1d-4fe4-9905-d4a7128fea84"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Budianto Wirawan (G.211.23.0023) - Usia: 22 tahun\n",
+            "Rata-rata nilai tugas: 85.0\n",
+            "Fitria Hanifa (G.211.23.0023) - Usia: 23 tahun\n",
+            "Rata-rata nilai tugas: 90.0\n"
+          ]
+        }
+      ],
+      "source": [
+        "# Import modul datetime untuk menghitung usia\n",
+        "import datetime\n",
+        "\n",
+        "# Kelas Mahasiswa untuk mempresentasikan seorang mahasiswa\n",
+        "class Mahasiswa:\n",
+        "    def __init__(self, nama, nim, tanggal_lahir):\n",
+        "        self.__nama = nama # Menginisialisasi atribut private nama\n",
+        "        self.__nim = nim # Menginisialisasi atribut private nim\n",
+        "        self.__tanggal_lahir = tanggal_lahir # Menginisialisasi atribut private tanggal_lahir\n",
+        "        self.__jumlah_tugas = 0 # Menginisialisasi atribut private jumlah_tugas dengan nilai 0\n",
+        "        self.__nilai_tugas = [] # Menginisialisasi atribut private nilai_tugas dengan list kosong\n",
+        "\n",
+        "    # Getter untuk atribut nama\n",
+        "    @property\n",
+        "    def nama(self):\n",
+        "        return self.__nama\n",
+        "\n",
+        "    # Setter untuk atribut nama\n",
+        "    @nama.setter\n",
+        "    def nama(self, nama_baru):\n",
+        "        if isinstance(nama_baru, str):\n",
+        "            self.__nama = nama_baru\n",
+        "        else:\n",
+        "            print(\"Nama harus berupa string\")\n",
+        "\n",
+        "    # Getter untuk atribut nim\n",
+        "    @property\n",
+        "    def nim(self):\n",
+        "        return self.__nim\n",
+        "\n",
+        "    # Setter untuk atribut nim\n",
+        "    @nim.setter\n",
+        "    def nim(self, nim_baru):\n",
+        "        if isinstance(nim_baru, str):\n",
+        "            self.__nim = nim_baru\n",
+        "        else:\n",
+        "            print(\"NIM harus berupa string\")\n",
+        "\n",
+        "    # Metode untuk menambahkan nilai tugas\n",
+        "    def tambah_tugas(self, nilai):\n",
+        "        if isinstance(nilai, (int, float)) and 0 <= nilai <= 100:\n",
+        "            self.__nilai_tugas.append(nilai)\n",
+        "            self.__jumlah_tugas += 1\n",
+        "        else:\n",
+        "            print(\"Nilai harus berupa angka antara 0 dan 100\")\n",
+        "\n",
+        "    # Metode untuk menghitung rata-rata nilai tugas\n",
+        "    def hitung_rata_rata(self):\n",
+        "        if self.__jumlah_tugas == 0:\n",
+        "            return 0\n",
+        "        return sum(self.__nilai_tugas) / self.__jumlah_tugas\n",
+        "\n",
+        "    # Metode untuk menghitung usia berdasarkan tanggal_lahir\n",
+        "    def hitung_usia(self):\n",
+        "        hari_ini = datetime.date.today()\n",
+        "        usia = hari_ini.year - self.__tanggal_lahir.year - ((hari_ini.month, hari_ini.day) < (self.__tanggal_lahir.month, self.__tanggal_lahir.day))\n",
+        "        return usia\n",
+        "\n",
+        "    # Metode khusus__str__untuk mengubah cara objek ditampilkan sebagai string\n",
+        "    def __str__(self):\n",
+        "        return f\"{self.__nama} ({self.__nim}) - Usia: {self.hitung_usia()} tahun\"\n",
+        "\n",
+        "# Membuat objek dari kelas Mahasiswa\n",
+        "mahasiswa1 = Mahasiswa(\"Budianto Wirawan\", \"G.211.23.0023\", datetime.date(2001, 2, 15))\n",
+        "mahasiswa2 = Mahasiswa(\"Fitria Hanifa\", \"G.211.23.0023\", datetime.date(2000, 8, 30))\n",
+        "\n",
+        "# Menambahkan nilai tugas\n",
+        "mahasiswa1.tambah_tugas(85)\n",
+        "mahasiswa2.tambah_tugas(90)\n",
+        "\n",
+        "# Menampilkan data mahasiswa\n",
+        "print(mahasiswa1) # Output: Budianto Wirawan (G.211.23.0023) - Usia: 22 tahun (tergantung tanggal saat ini)\n",
+        "print(\"Rata-rata nilai tugas:\", mahasiswa1.hitung_rata_rata()) # Output: Rata-rata nilai tugas: 87.5\n",
+        "\n",
+        "# Menampilkan data mahasiswa2\n",
+        "print(mahasiswa2) # Output: Fitria Hanifa (G.211.23.0023) - Usia: 23 tahun (tergantung tanggal saat ini)\n",
+        "print(\"Rata-rata nilai tugas:\", mahasiswa2.hitung_rata_rata()) # Output: Rata-rata nilai tugas: 0\n",
+        "\n"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Tanpa Enkapsulasi**"
+      ],
+      "metadata": {
+        "id": "5Ri-uZtk3Ve9"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class MahasiswaTanpaEnkapsulasi:\n",
+        "    def __init__(self, nama, nim):\n",
+        "        self.nama = nama\n",
+        "        self.nim = nim\n",
+        "        self.nilai_tugas = []\n",
+        "        self.jumlah_tugas = 0\n",
+        "\n",
+        "    def tambah_tugas(self, nilai):\n",
+        "        self.nilai_tugas.append(nilai)\n",
+        "        self.jumlah_tugas += 1\n",
+        "        print(f\"Nilai tugas {nilai} berhasil ditambahkan.\")\n",
+        "\n",
+        "    def hitung_rata_rata(self):\n",
+        "        if self.jumlah_tugas == 0:\n",
+        "             return 0\n",
+        "        return sum(self.nilai_tugas) / self.jumlah_tugas\n",
+        "\n",
+        "    def tampilkan_data(self):\n",
+        "        print(f\"Nama: {self.nama}, NIM: {self.nim}, Rata-rata Nilai Tugas: {self.hitung_rata_rata()}\")\n",
+        "\n",
+        "# Contoh penggunaan\n",
+        "mahasiswa_tanpa_enkapsulasi = MahasiswaTanpaEnkapsulasi(\"Budianto Wirawan\", \"G.211.23.0023\")\n",
+        "mahasiswa_tanpa_enkapsulasi.tambah_tugas(90)\n",
+        "mahasiswa_tanpa_enkapsulasi.tambah_tugas(50)\n",
+        "mahasiswa_tanpa_enkapsulasi.tambah_tugas(30)\n",
+        "mahasiswa_tanpa_enkapsulasi.tampilkan_data()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "M7_6aA9lE8zx",
+        "outputId": "6852d215-80b3-4902-fe29-82f203dae3fb"
+      },
+      "execution_count": 3,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Nilai tugas 90 berhasil ditambahkan.\n",
+            "Nilai tugas 50 berhasil ditambahkan.\n",
+            "Nilai tugas 30 berhasil ditambahkan.\n",
+            "Nama: Budianto Wirawan, NIM: G.211.23.0023, Rata-rata Nilai Tugas: 56.666666666666664\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Dengan Enkapsulasi**"
+      ],
+      "metadata": {
+        "id": "E24X6pad3lZQ"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class MahasiswaDenganEnkapsulasi:\n",
+        "\n",
+        "  # Atribut Privat\n",
+        "  # Atribut privat diawali dengan dua garis bawah (__). Ini digunakan untuk menyembunyikan atribut dari\n",
+        "    def __init__(self, nama, nim):\n",
+        "        self.__nama = nama\n",
+        "        self.__nim = nim\n",
+        "        self.__nilai_tugas = []\n",
+        "        self.__jumlah_tugas = 0\n",
+        "\n",
+        "    def tambah_tugas(self, nilai):\n",
+        "        self.__nilai_tugas.append(nilai)\n",
+        "        self.__jumlah_tugas += 1\n",
+        "        print(f\"Nilai tugas {nilai} berhasil ditambahkan.\")\n",
+        "\n",
+        "    def hitung_rata_rata(self):\n",
+        "        if self.__jumlah_tugas == 0:\n",
+        "            return 0\n",
+        "        return sum(self.__nilai_tugas) / self.__jumlah_tugas\n",
+        "\n",
+        "    def tampilkan_data(self):\n",
+        "        print(f\"Nama: {self.__nama}, NIM: {self.__nim}, Rata-rata Nilai Tugas: {self.hitung_rata_rata()} \")\n",
+        "\n",
+        "# Contoh penggunaan\n",
+        "mahasiswa_dengan_enkapsulasi = MahasiswaDenganEnkapsulasi(\"Budianto Wirawan\", \"G.211.23.0023\")\n",
+        "mahasiswa_dengan_enkapsulasi.tambah_tugas(90)\n",
+        "mahasiswa_dengan_enkapsulasi.tampilkan_data()\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "6bWdjUvPHnzY",
+        "outputId": "32bec4db-73fe-4d3b-afef-8205ff732d30"
+      },
+      "execution_count": 41,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Nilai tugas 90 berhasil ditambahkan.\n",
+            "Nama: Budianto Wirawan, NIM: G.211.23.0023, Rata-rata Nilai Tugas: 90.0 \n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "source": [
+        "**Keyword Utama Untuk Enkapsulasi dalam Python adalah:**"
+      ],
+      "metadata": {
+        "id": "BId1Pndu3vaE"
+      }
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class MahasiswaDenganEnkapsulasi:\n",
+        "    def __init__(self, nama, nim):\n",
+        "        self.__nama = nama  # Atribut Privat\n",
+        "        self.__nim = nim    # Atribut Privat\n",
+        "        self.__nilai_tugas = []  # Atribut Privat\n",
+        "        self.__jumlah_tugas = 0  # Atribut Privat\n",
+        "\n",
+        "    def tambah_tugas(self, nilai):\n",
+        "        self.__nilai_tugas.append(nilai)\n",
+        "        self.__jumlah_tugas += 1\n",
+        "        print(f\"Nilai tugas {nilai} berhasil ditambahkan.\")\n",
+        "\n",
+        "    def hitung_rata_rata(self):\n",
+        "        if self.__jumlah_tugas == 0:\n",
+        "            return 0\n",
+        "        return sum(self.__nilai_tugas) / self.__jumlah_tugas\n",
+        "\n",
+        "    @property\n",
+        "    def nama(self): # Getter untuk nama\n",
+        "        return self.__nama\n",
+        "\n",
+        "    @nama.setter\n",
+        "    def nama(self, nama_baru):  # Setter untuk nama\n",
+        "        if isinstance(nama_baru, str):\n",
+        "          self.__nama = nama_baru\n",
+        "        else:\n",
+        "          print(\"Nama harus berupa string\")\n",
+        "    @property\n",
+        "    def nim(self): # Getter untuk nim\n",
+        "        return self.__nim\n",
+        "    @nim.setter\n",
+        "    def nim(self, nim_baru):  # Setter untuk nim\n",
+        "        if isinstance(nim_baru, str):\n",
+        "            self.__nim = nim_baru\n",
+        "        else:\n",
+        "            print(\"NIM harus berupa string\")\n",
+        "\n",
+        "    def tampilkan_data(self):\n",
+        "        print(f\"Nama: {self.__nama}, NIM: {self.__nim}, Rata-rata Nilai Tugas: {self.hitung_rata_rata()} \")\n",
+        "\n",
+        "\n",
+        "# Contoh penggunaan\n",
+        "mahasiswa_dengan_enkapsulasi = MahasiswaDenganEnkapsulasi(\"Budianto Wirawan\", \"G.211.23.0023\")\n",
+        "mahasiswa_dengan_enkapsulasi.tambah_tugas(90)\n",
+        "mahasiswa_dengan_enkapsulasi.tampilkan_data()"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "_3P-JibuIruJ",
+        "outputId": "675cbf99-54c1-49e5-e618-acaefc39198c"
+      },
+      "execution_count": 42,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Nilai tugas 90 berhasil ditambahkan.\n",
+            "Nama: Budianto Wirawan, NIM: G.211.23.0023, Rata-rata Nilai Tugas: 90.0 \n"
+          ]
+        }
+      ]
+    }
+  ]
+}
